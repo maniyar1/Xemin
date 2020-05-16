@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.72'
+    id 'org.jetbrains.kotlin.plugin.serialization' version '1.3.72'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+}
+
+group 'org.mani'
+version '1.0-SNAPSHOT'
+mainClassName = 'xemin.XeminApp'
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        url "https://nexus.gluonhq.com/nexus/content/repositories/releases/"
+    }
+}
+
+javafx {
+    version = "12.0.1"
+    modules = [ 'javafx.controls', 'javafx.fxml', 'javafx.swing', 'javafx.media' ]
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+    compile 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.6'
+    compile 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.20.0' // JVM dependency
+    compile 'org.jetbrains.kotlinx:kotlinx-serialization-cbor:0.20.0'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile 'com.github.almasb:fxgl:11.7'
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "11"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "11"
+}
