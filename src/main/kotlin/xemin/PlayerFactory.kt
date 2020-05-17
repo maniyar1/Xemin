@@ -1,6 +1,7 @@
 package xemin
 
 import com.almasb.fxgl.dsl.EntityBuilder
+import com.almasb.fxgl.dsl.random
 import com.almasb.fxgl.entity.Entity
 import com.almasb.fxgl.entity.EntityFactory
 import com.almasb.fxgl.entity.SpawnData
@@ -13,6 +14,6 @@ object PlayerFactory : EntityFactory {
 
     @Spawns("player")
     fun newPlayer(data: SpawnData): Entity {
-       return EntityBuilder().from(data).view(Rectangle(70.0, 70.0)).with(PlayerComponent(Point2D(data.x, data.y))).build()
+       return EntityBuilder().from(data).view(Rectangle(70.0, 70.0)).with(PlayerComponent(Point2D(data.x, data.y), data.get("id"))).type(EntityType.PLAYER).build()
     }
 }
