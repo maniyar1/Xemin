@@ -33,6 +33,16 @@ dependencies {
     compile 'com.github.almasb:fxgl:11.7'
 }
 
+jar {
+    manifest {
+        attributes "Main-Class": "xemin.XeminApp"
+    }
+
+    from {
+        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
 compileKotlin {
     kotlinOptions.jvmTarget = "11"
 }

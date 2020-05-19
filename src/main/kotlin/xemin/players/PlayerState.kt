@@ -1,9 +1,18 @@
-package xemin
+package xemin.players
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PlayerState(var position: XeminPoint, val uniqueIdentifier: Int, var time: Long, val inputs: Inputs, val serverReset: Boolean)
+data class PlayerState(var position: XeminPoint, var velocity: XeminPoint, val uniqueIdentifier: Int, var time: Long, var inputs: Inputs, var serverReset: Boolean) {
+    fun clone(newPlayerState: PlayerState) {
+        this.position = newPlayerState.position
+        this.velocity = newPlayerState.velocity
+        this.time = newPlayerState.time
+        this.inputs = newPlayerState.inputs
+        this.serverReset = newPlayerState.serverReset
+    }
+
+}
 
 @Serializable
 data class XeminPoint(var x: Double, var y: Double)

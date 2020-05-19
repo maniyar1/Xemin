@@ -1,13 +1,13 @@
-package xemin
+package xemin.players
 
 import com.almasb.fxgl.dsl.EntityBuilder
-import com.almasb.fxgl.dsl.random
 import com.almasb.fxgl.entity.Entity
 import com.almasb.fxgl.entity.EntityFactory
 import com.almasb.fxgl.entity.SpawnData
 import com.almasb.fxgl.entity.Spawns
 import javafx.geometry.Point2D
 import javafx.scene.shape.Rectangle
+import xemin.EntityType
 import xemin.component.PlayerComponent
 
 object PlayerFactory : EntityFactory {
