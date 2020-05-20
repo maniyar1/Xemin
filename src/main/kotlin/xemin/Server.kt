@@ -21,7 +21,6 @@ object Server: CoroutineScope{
 
    val cbor = Cbor()
    var entityList = ConcurrentLinkedQueue<PlayerState>()
-   val testState = PlayerState(XeminPoint(0.0, 0.0), XeminPoint(0.0, 0.0),20, System.currentTimeMillis(), Inputs(false, true, false, false), false)
 
    fun connectionEstablisher() {
       while (true) {

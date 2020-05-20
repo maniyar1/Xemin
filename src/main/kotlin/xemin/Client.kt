@@ -12,6 +12,7 @@ import xemin.players.FullState
 import xemin.players.PlayerFactory
 import xemin.players.PlayerState
 import java.io.DataInputStream
+import java.lang.Exception
 import java.lang.Math.abs
 import java.net.DatagramPacket
 import java.net.DatagramSocket
@@ -27,7 +28,7 @@ object Client : CoroutineScope {
     val entitiesToAddState = ConcurrentLinkedQueue<Entity>()
 
     val socket = DatagramSocket()
-    val address = InetAddress.getByName("localhost")
+    val address = InetAddress.getByName(Constants.address)
     val cbor = Cbor()
 
     fun run(playerState: PlayerState, mainCharacterId: Int) {
@@ -43,6 +44,7 @@ object Client : CoroutineScope {
 
             val buffer = ByteArray(1400)
             val recPacket = DatagramPacket(buffer, buffer.size, address, port)
+//            Thread.sleep(20)
             socket.receive(recPacket)
             val playerStates = cbor.load(FullState.serializer(), recPacket.data)
             playerStates.players.forEach { serverState ->
@@ -79,8 +81,8 @@ object Client : CoroutineScope {
                 while (errorX > 5 || errorY > 5) {
                     errorX = serverState.position.x - entityComponent.position.x
                     errorY = serverState.position.y - entityComponent.position.y
-                    entityComponent.playerState.velocity.x = errorX * Constants.speed * 0.1
-                    entityComponent.playerState.velocity.y = errorY * Constants.speed * 0.1
+                    entityComponent.playerState.velocity.x = errorX * entityComponent.speed * 0.1
+                    entityComponent.playerState.velocity.y = errorY * entityComponent.speed * 0.1
                 }
 //                println("Reset, player position x: ${entityComponent.position.x}\t Server position: ${serverState.position.x}")
 //                println("Reset, player position y: ${entityComponent.position.y}\t Server position: ${serverState.position.y}")

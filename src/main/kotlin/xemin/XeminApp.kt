@@ -6,11 +6,14 @@ import com.almasb.fxgl.dsl.*
 import com.almasb.fxgl.entity.Entity
 import com.almasb.fxgl.entity.SpawnData
 import com.almasb.fxgl.input.UserAction
+import com.almasb.fxgl.physics.CollisionHandler
+import javafx.geometry.Point2D
 import javafx.scene.input.KeyCode
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import xemin.component.PlayerComponent
 import xemin.players.PlayerFactory
+import xemin.players.XeminPoint
 
 class XeminApp : GameApplication() {
     private lateinit var mainPlayer: Entity
@@ -38,9 +41,9 @@ class XeminApp : GameApplication() {
 
         initScreenBounds()
         initPlayer()
-        GlobalScope.launch {
-            Server.connectionEstablisher()
-        }
+//        GlobalScope.launch {
+//            Server.connectionEstablisher()
+//        }
         GlobalScope.launch {
             Client.run(playerComponent.playerState, playerComponent.uniqueIdentifier)
         }
@@ -53,6 +56,24 @@ class XeminApp : GameApplication() {
     private fun initPlayer() {
         mainPlayer = spawn("player", SpawnData(50.0, getAppHeight() - 300.0).put("id", random(0, 100000)) )
         playerComponent = mainPlayer.getComponent(PlayerComponent::class.java)
+    }
+
+    override fun initPhysics() {
+        getPhysicsWorld().addCollisionHandler(object : CollisionHandler(EntityType.PLAYER, EntityType.PLAYER) {
+            override fun onCollisionBegin(a: Entity?, b: Entity?) {
+                if (b != null && a != null) {
+                    if (a.getComponent(PlayerComponent::class.java).speed < b.getComponent(PlayerComponent::class.java).speed) {
+                        a.getComponent(PlayerComponent::class.java).lastDeathTime = System.currentTimeMillis()
+                        a.getComponent(PlayerComponent::class.java).position.position = Point2D(0.0, 0.0)
+                        a.getComponent(PlayerComponent::class.java).playerState.position = XeminPoint(0.0, 0.0)
+                    } else {
+                        b.getComponent(PlayerComponent::class.java).lastDeathTime = System.currentTimeMillis()
+                        b.getComponent(PlayerComponent::class.java).position.position = Point2D(0.0, 0.0)
+                        b.getComponent(PlayerComponent::class.java).playerState.position = XeminPoint(0.0, 0.0)
+                    }
+                }
+            }
+        })
     }
 
     override fun onUpdate(tpf: Double) {
